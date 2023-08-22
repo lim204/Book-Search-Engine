@@ -8,7 +8,7 @@ const {authMiddleware} = require ('./utils/auth');
 
 
 // uncomment type and resolvers when files are done
-const {typeDefts, resolvers} = require ('./schemas');
+const {typeDefs, resolvers} = require ('./schemas');
 const db = require('./config/connection');
 
 // uncomment routes since we would use them anymore
@@ -17,7 +17,7 @@ const db = require('./config/connection');
 const app = express();
 const PORT = process.env.PORT || 3001;
 const server = new ApolloServer({
-  typeDefts,
+  typeDefs,
   resolvers,
   context: authMiddleware,
 });
@@ -56,4 +56,4 @@ const startApolloServer = async () => {
   };
   
 // Call the async function to start the server
-  startApolloServer();
+  startApolloServer(typeDefs,resolvers);

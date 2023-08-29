@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 
 // import { loginUser change to LOGIN_USER } from '../utils/API';
-import {LOGIN_USER} from '../utils/mutation';
+import {LOGIN_USER} from '../utils/mutations';
 import {useMutation} from '@apollo/client';
 import Auth from '../utils/auth';
 
@@ -19,7 +19,7 @@ const LoginForm = () => {
   }else{
     setShowAlert (false);
   }
- }, [Error]);
+ }, [error]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -36,19 +36,29 @@ const LoginForm = () => {
       event.stopPropagation();
     }
 
+    // try {
+    //   const response = await login(userFormData);
+
+    //   if (!response.ok) {
+    //     throw new Error('something went wrong!');
+    //   }
+
+    //   const { token, user } = await response.json();
+    //   console.log(user);
+    //   Auth.login(token);
+    // } catch (err) {
+    //   console.error(err);
+    //   setShowAlert(true);
+    // }
+
     try {
-      const response = await loginUser(userFormData);
-
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
-
-      const { token, user } = await response.json();
-      console.log(user);
-      Auth.login(token);
-    } catch (err) {
-      console.error(err);
-      setShowAlert(true);
+      const {data} = await login({
+        variable: {...userFormData},
+      })
+      console.log(data);
+      Auth.login (data.login.token);
+    }catch (e){
+      console.error(e);
     }
 
     setUserFormData({
